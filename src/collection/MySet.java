@@ -164,6 +164,50 @@ public class MySet extends MyVector {
 	}
         
         
+        /**
+         * method to determine if given number is part of the fibonacci sequence
+         * @param place is the number in the sequence desired (ie) input
+         * of 5 would give the 5 number of the sequence
+         */
+        public int fib(int place) { 
+            double phi = (1 + Math.sqrt(5)) / 2; 
+            return (int) Math.round(Math.pow(phi, place)  
+                            / Math.sqrt(5)); 
+        }
+            
+        /**
+         * method that adds fibonacci numbers to a set
+         * @param amt is the total number of items to add to the given set
+         */
+        public void addFib(int amt){
+            int number = 0;
+            for (int adds = 0; adds < amt;) {
+                if(this.add(this.fib(number)) == true){
+                number++;
+                adds++;
+                }
+            else
+                    number++;
+            }
+        }
+ 
+       
+        /**
+         * method to determine if a number is prime
+         * @param num is the number checked
+         * @return true if number is prime
+         */
+        public boolean isPrime(int num) {
+            for(int i = 2; i <= num/2; ++i)
+        {
+            if(num % i == 0)
+            {
+                return false;
+            }
+        }
+            return true;
+        }
+        
        /**
      * method that will add prime numbers to a set
      *
@@ -171,10 +215,10 @@ public class MySet extends MyVector {
      */
     public void addPrime(int amt) {
         int number = 2;
-        int adds = 0;
-        if (adds <= amt){
-        for (int i = 2; i > 2; ++i) {
-            if (number % i == 0) {
+        //int adds = 0;
+       // if (adds <= amt){
+        for (int adds = 0; adds < amt;) {
+            if (this.isPrime(number) == false) {
                 number++;
             } else {
                 this.add(number);
@@ -182,7 +226,7 @@ public class MySet extends MyVector {
                 adds++;
             }
         }
-        }
+        //}
     }
 }
 
