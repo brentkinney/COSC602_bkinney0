@@ -37,11 +37,11 @@ public class MySet extends MyVector {
         MySet complement = new MySet();
         complement.ensureCapacity(this.size);
         complement = this.clone();
-        for(int i = 0; i < size; ++i)
+        for(int i = 0; i < B.size; ++i)
                 {
-                    if (this.contains(data[i]) == true)
+                    if (complement.contains(B.data[i]) == true)
                     {
-                        complement.removeAt(i);
+                        complement.remove(B.data[i]);
                     }
                 }
         
@@ -74,7 +74,7 @@ public class MySet extends MyVector {
                 {
                  for(int j =0; j < B.size; j++){
                      if(data[i] == B.data[j]){
-                         intersection.add(B.data[i]);
+                         intersection.add(B.data[j]);
                      }
                  }   
                     
@@ -103,6 +103,26 @@ public class MySet extends MyVector {
         return true;
     }
     
+    
+    /**
+     * method that returns a new set of elements which are in one of the sets,
+     * but not in both.
+     * @param B set to test
+     * @return new set of difference
+     */
+    public MySet symmetricDifference(MySet B) {
+        MySet symmetricDifference = new MySet();
+        MySet temp1 = new MySet();
+        MySet temp2 = new MySet();
+        temp1.ensureCapacity(this.size);
+        temp2.ensureCapacity(this.size);
+        symmetricDifference.ensureCapacity(this.size);
+        temp1 = this.complement(B);
+        temp2 = B.complement(this);
+        symmetricDifference = temp1.union(temp2);
+        
+         return symmetricDifference;
+    }
     
     /**
      * creates new set, this set union with given B
