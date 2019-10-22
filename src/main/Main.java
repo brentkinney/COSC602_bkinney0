@@ -15,6 +15,6 @@ import project.*;
 public class Main {
     public static void main(String [] args)
     {
-    Project1.test();
+    Project2.test();
     }
 }
