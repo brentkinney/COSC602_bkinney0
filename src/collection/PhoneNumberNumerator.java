@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.lang.String;
 
 
 /**
@@ -41,7 +42,7 @@ public class PhoneNumberNumerator {
                 //table.append("PQRS");
                 //table.append("TUV");
                 //table.append("WXYZ");
-                String[] table = { "", "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ" };
+                String[] table = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
 		Boolean valid = ((digit >= '2') && (digit <= '9'));
 		return valid ? table[digit - '0'] : table[1];
 	}
@@ -50,7 +51,7 @@ public class PhoneNumberNumerator {
 	{
 		if ((remaining == "") || (remaining.length() == 0))
 		{
-			numeratorList.append(prefix);
+			numeratorList.append(prefix.trim());
 		}
 		else
 		{
@@ -75,7 +76,11 @@ public class PhoneNumberNumerator {
 		}
 	}
        
-       
+      /**
+       * Used to make sure numeratorList contains all the combinations of letters
+       * a Phone number can have
+       * @param phonenum is the given phone number 
+       */ 
       public void printList(String phonenum)
 	{
 		for (int i = 0; i < numeratorList.size(); i++)
@@ -107,14 +112,13 @@ public class PhoneNumberNumerator {
 	}
       
       
-      
+      /**
+       * print the list of real words that match a phone number
+       * @param phonenum the phone number used
+       */
       public void printComparedList(String phonenum)
 	{
 		for (int i = 0; i < comparedList.size(); i++)
-                    if (i % 4 == 0) {
-				System.out.println();
-			}
-                else
                     {
                        System.out.println((i + 1) + "." + comparedList.data[i] + " "); 
                     }
@@ -125,7 +129,10 @@ public class PhoneNumberNumerator {
       
       
       
-      
+      /**
+       * compare the raw combinations of letters a phone number can have with 
+       * the words list and store all matches found.
+       */
       public void compareWords()
       {
           File file = new File("..\\COSC602_P2_EnglishWordList.txt");
@@ -145,6 +152,7 @@ public class PhoneNumberNumerator {
           {
               e.printStackTrace();
           }
+          /**
           for (int i = 0; i < wordList.size(); i++)
                     if (i % 4 == 0) {
 				System.out.println();
@@ -152,16 +160,18 @@ public class PhoneNumberNumerator {
                 else
                     {
                        System.out.println((i + 1) + "." + wordList.data[i] + " "); 
-                    }
-          /**
+                    }**/
+          
           for (int i = 0; i < numeratorList.size(); i++)
           {
-              if (MySearch.binarySearch(wordList, numeratorList.data[i]) != -1)
+              //System.out.println(MySearch.binarySearch(wordList, (Comparable) numeratorList.data[i]));
+              
+              if (MySearch.binarySearch(wordList, (Comparable) numeratorList.data[i]) != -1)
                       {
                           comparedList.append(numeratorList.data[i]);
                       }
               
                   
-          }**/
+          }
       }
 }
