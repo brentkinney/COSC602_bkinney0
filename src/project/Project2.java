@@ -49,13 +49,12 @@ public class Project2
                  }
              } while (innerChoice == 'y' || innerChoice == 'Y'); 
             
-            for (int i =0; i < temp.length(); i++)
-            {
-                phoneGiven[i] = temp.charAt(i) - '0';
-            }
+            
             PhoneNumberNumerator numerator1 = new PhoneNumberNumerator();
             numerator1.printAllWordsFromPrefixAndPhoneNumber(wordList, temp);
             numerator1.printList(temp);
+            numerator1.compareWords();
+            numerator1.printComparedList(temp);
             System.out.println();
             System.out.println();
             System.out.println();

@@ -4,6 +4,12 @@
  * and open the template in the editor.
  */
 package collection;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 /**
  *
@@ -12,6 +18,8 @@ package collection;
 public class PhoneNumberNumerator {
     private
     MyVector numeratorList = new MyVector();
+    MyVector wordList = new MyVector();
+    MyVector comparedList = new MyVector();
     
     
     
@@ -96,5 +104,64 @@ public class PhoneNumberNumerator {
 		else
 			System.out.println("\n\nFor phone number " + phonenum + " there are " + numeratorList.size() + " possible words.");
 
-	} 
+	}
+      
+      
+      
+      public void printComparedList(String phonenum)
+	{
+		for (int i = 0; i < comparedList.size(); i++)
+                    if (i % 4 == 0) {
+				System.out.println();
+			}
+                else
+                    {
+                       System.out.println((i + 1) + "." + comparedList.data[i] + " "); 
+                    }
+                System.out.println();
+                System.out.println();
+                System.out.println("\n\nFor phone number " + phonenum + " there are " + comparedList.size() + " possible words.");
+        }
+      
+      
+      
+      
+      public void compareWords()
+      {
+          File file = new File("..\\COSC602_P2_EnglishWordList.txt");
+          //System.out.println(file.getAbsolutePath());
+          //String file = new File("").getAbsolutePath();
+          //file.concat("./COSC602_P2_EnglishWordList.txt");
+          try{
+          Scanner input = new Scanner(file);
+          while (input.hasNextLine())
+          {
+              //if (input.nextLine().length() == 7)
+              wordList.append(input.nextLine());
+          }
+          input.close();
+          }
+          catch (FileNotFoundException e)
+          {
+              e.printStackTrace();
+          }
+          for (int i = 0; i < wordList.size(); i++)
+                    if (i % 4 == 0) {
+				System.out.println();
+			}
+                else
+                    {
+                       System.out.println((i + 1) + "." + wordList.data[i] + " "); 
+                    }
+          /**
+          for (int i = 0; i < numeratorList.size(); i++)
+          {
+              if (MySearch.binarySearch(wordList, numeratorList.data[i]) != -1)
+                      {
+                          comparedList.append(numeratorList.data[i]);
+                      }
+              
+                  
+          }**/
+      }
 }
