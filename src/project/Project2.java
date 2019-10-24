@@ -19,6 +19,7 @@ public class Project2
          char choice = 'y';
          Scanner in = new Scanner(System.in);
          String temp;
+         String wordList = "";
          int [] phoneGiven;
          
          do
@@ -52,6 +53,9 @@ public class Project2
             {
                 phoneGiven[i] = temp.charAt(i) - '0';
             }
+            PhoneNumberNumerator numerator1 = new PhoneNumberNumerator();
+            numerator1.printAllWordsFromPrefixAndPhoneNumber(wordList, temp);
+            numerator1.printList(temp);
             
            
          } while (choice == 'y' || choice == 'Y'); 
