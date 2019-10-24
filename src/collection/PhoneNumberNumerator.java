@@ -123,7 +123,6 @@ public class PhoneNumberNumerator {
                        System.out.println((i + 1) + "." + comparedList.data[i] + " "); 
                     }
                 System.out.println();
-                System.out.println();
                 System.out.println("\n\nFor phone number " + phonenum + " there are " + comparedList.size() + " possible words.");
         }
       
@@ -136,14 +135,11 @@ public class PhoneNumberNumerator {
       public void compareWords()
       {
           File file = new File("..\\COSC602_P2_EnglishWordList.txt");
-          //System.out.println(file.getAbsolutePath());
-          //String file = new File("").getAbsolutePath();
-          //file.concat("./COSC602_P2_EnglishWordList.txt");
           try{
           Scanner input = new Scanner(file);
           while (input.hasNextLine())
           {
-              //if (input.nextLine().length() == 7)
+              
               wordList.append(input.nextLine());
           }
           input.close();
@@ -152,26 +148,13 @@ public class PhoneNumberNumerator {
           {
               e.printStackTrace();
           }
-          /**
-          for (int i = 0; i < wordList.size(); i++)
-                    if (i % 4 == 0) {
-				System.out.println();
-			}
-                else
-                    {
-                       System.out.println((i + 1) + "." + wordList.data[i] + " "); 
-                    }**/
-          
+                    
           for (int i = 0; i < numeratorList.size(); i++)
           {
-              //System.out.println(MySearch.binarySearch(wordList, (Comparable) numeratorList.data[i]));
-              
               if (MySearch.binarySearch(wordList, (Comparable) numeratorList.data[i]) != -1)
                       {
                           comparedList.append(numeratorList.data[i]);
-                      }
-              
-                  
+                      }                  
           }
       }
 }

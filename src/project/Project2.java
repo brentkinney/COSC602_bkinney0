@@ -33,12 +33,12 @@ public class Project2
                  phoneGiven = new int[temp.length()];
                  if (temp.length() != 7)
                 {
-                    System.out.println("Phone must be 7 digits, please try again: ");
+                    System.out.println("Phone must be 7 digits, please try again!");
                     System.out.println();
                 }
                  else if (temp.contains("0") == true || temp.contains("1") == true)
                  {
-                     System.out.println("Phone must not contain '0' or '1', please try again: ");
+                     System.out.println("Phone must not contain '0' or '1', please try again!");
                      System.out.println();
                  }
                  else
@@ -52,15 +52,15 @@ public class Project2
             
             PhoneNumberNumerator numerator1 = new PhoneNumberNumerator();
             numerator1.printAllWordsFromPrefixAndPhoneNumber(wordList, temp);
-            //numerator1.printList(temp);
             numerator1.compareWords();
             numerator1.printComparedList(temp);
             System.out.println();
             System.out.println();
-            System.out.println();
             System.out.println("Would you like to check another phone number? (Y/N): ");
             choice = in.next().charAt(0);
-           
+            in.nextLine();
+            System.out.println();
+            System.out.println();
          } while (choice == 'y' || choice == 'Y'); 
      }
 }
