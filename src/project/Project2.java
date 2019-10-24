@@ -56,7 +56,11 @@ public class Project2
             PhoneNumberNumerator numerator1 = new PhoneNumberNumerator();
             numerator1.printAllWordsFromPrefixAndPhoneNumber(wordList, temp);
             numerator1.printList(temp);
-            
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println("Would you like to check another phone number? (Y/N): ");
+            choice = in.next().charAt(0);
            
          } while (choice == 'y' || choice == 'Y'); 
      }
