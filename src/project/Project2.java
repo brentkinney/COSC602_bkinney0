@@ -20,7 +20,7 @@ public class Project2
          Scanner in = new Scanner(System.in);
          String temp;
          String wordList = "";
-         int [] phoneGiven;
+         
          
          do
          {
@@ -30,7 +30,7 @@ public class Project2
              {
                  System.out.println("Please enter a 7 digit phone number: ");
                  temp = in.nextLine();
-                 phoneGiven = new int[temp.length()];
+                 
                  if (temp.length() != 7)
                 {
                     System.out.println("Phone must be 7 digits, please try again!");

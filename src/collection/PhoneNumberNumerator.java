@@ -7,8 +7,6 @@ package collection;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.lang.String;
 
 
@@ -31,23 +29,18 @@ public class PhoneNumberNumerator {
         
         String getLettersForNumber(char digit)
 	{
-		//MyVector table = new MyVector();
-                //table.append("");
-                //table.append("");
-                //table.append("ABC");
-                //table.append("DEF");
-                //table.append("GHI");
-                //table.append("JKL");
-                //table.append("MNO");
-                //table.append("PQRS");
-                //table.append("TUV");
-                //table.append("WXYZ");
                 String[] table = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
 		Boolean valid = ((digit >= '2') && (digit <= '9'));
 		return valid ? table[digit - '0'] : table[1];
 	}
             
-      public void printAllWordsFromPrefixAndPhoneNumber(String prefix, String remaining)
+      /**
+       * This method adds all possible word combinations for a phone number to 
+       * MyVecotor numeratorList
+       * @param prefix empty string
+       * @param remaining the numbers remaining for the phone number
+       */
+       public void printAllWordsFromPrefixAndPhoneNumber(String prefix, String remaining)
 	{
 		if ((remaining == "") || (remaining.length() == 0))
 		{
