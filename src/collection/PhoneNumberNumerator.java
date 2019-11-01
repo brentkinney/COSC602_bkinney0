@@ -77,26 +77,10 @@ public class PhoneNumberNumerator {
       public void printList(String phonenum)
 	{
 		for (int i = 0; i < numeratorList.size(); i++)
-		{
-
-			if (i % 4 == 0) {
-				System.out.println();
-			}
-
-			if (i < 10)
-			{
-				System.out.println((i + 1) + "." + numeratorList.data[i] + " ");
-			}
-			else
-			{
-				System.out.println(" " + "\b\b" + (i + 1) + "." + numeratorList.data[i] + "  ");
-			}
-
-
-
+                {	
+		System.out.println((i + 1) + "." + numeratorList.data[i] + " ");
 		}
-
-
+                
 		if (numeratorList.size() == 1)
 			System.out.println("\n\nFor phone number " + phonenum + " there is " + numeratorList.size() + " possible word.");
 		else
