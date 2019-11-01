@@ -18,10 +18,10 @@ import java.util.logging.Logger;
  */
 public class InfixToPostfix {
     private
-            //MyQueue queue = new MyQueue();
-            //MyStack initStack = new MyStack();
-            //MyStack finalStack = new MyStack();
-            //String postfixExp;
+            MyQueue queue = new MyQueue();
+            MyStack initStack = new MyStack();
+            MyStack finalStack = new MyStack();
+            String postfixExp;
             
     static int Prec(char ch) 
     { 
@@ -50,11 +50,11 @@ public class InfixToPostfix {
                 Scanner input = new Scanner(file);
                 while (input.hasNextLine()) {
                     
-                    String exp = input.nextLine();
-                    exp = exp.replaceAll("\\s", "");
+                    String line = input.nextLine();
+                    String exp = line.replaceAll("\\s", "");
                     if (!exp.isEmpty()){
-                    String post = this.convertInfixToPostfix(exp);                    
-                    outputFile.println("Original Infix:            " + exp);
+                    String post = this.convertInfix(exp);                    
+                    outputFile.println("Original Infix:            " + line);
                     outputFile.println("Corresponding Postfix:     " + post );
                     if (!post.equalsIgnoreCase("Invalid Expression")){
                     int eval = this.evaluatePostfix(post);
@@ -75,10 +75,103 @@ public class InfixToPostfix {
             outputFile.close();
         }
     }
-            
-            
-            
-      public String convertInfixToPostfix (String exp) 
+       
+       /**
+       public String infixToPostfix(String exp) {
+        String postfixString = "";
+        MyStack stack = new MyStack();
+        for (int index = 0; index < exp.length(); ++index) {
+            char value = exp.charAt(index);
+            if (value == '(') {
+                stack.push('('); // Code Added
+            } else if (value == ')') {
+                Character oper = (Character) stack.top();
+
+                while (!(oper.equals('(')) && !(stack.isEmpty())) {
+                    stack.pop();
+                    postfixString += oper.charValue();
+                    if (!stack.isEmpty()) // Code Added
+                        oper = (Character) stack.top(); // Code Added
+                }
+                stack.pop(); // Code Added
+            } else if (value == '+' || value == '-') {
+                if (stack.isEmpty()) {
+                    stack.push(value);
+                } else {
+                    Character oper = (Character) stack.top();
+                    while (!(stack.isEmpty() || oper.equals(('(')) || oper.equals((')')))) {
+                        oper = (Character) stack.pop(); // Code Updated
+                        postfixString += oper.charValue();
+                    }
+                    stack.push(value);
+                }
+            } else if (value == '*' || value == '/') {
+                if (stack.isEmpty()) {
+                    stack.push(value);
+                } else {
+                    Character oper = (Character) stack.top();
+                    // while condition updated
+                    while (!oper.equals(('(')) && !oper.equals(('+')) && !oper.equals(('-')) && !stack.isEmpty()) {
+                        oper = (Character) stack.pop(); // Code Updated
+                        postfixString += oper.charValue();
+                    }
+                    stack.push(value);
+                }
+            } else {
+                postfixString += value;
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            Character oper = (Character) stack.top();
+            if (!oper.equals(('('))) {
+                stack.pop();
+                postfixString += oper.charValue();
+            }
+        }
+        return postfixString;
+    }**/
+         
+      public static boolean isOperator(char c){
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' 
+        || c == '(' || c == ')';
+      } 
+       
+      
+       public String convertInfix (String exp)
+       {
+           //MyQueue queue = new MyQueue();
+           //MyStack initStack = new MyStack();
+           //MyStack finalStack = new MyStack();
+           
+          for (int i = 0; i<exp.length(); ++i){
+            char c = exp.charAt(i);
+            if (Character.isDigit(c) == true)
+            {
+               int v = Character.getNumericValue(c);
+               queue.insertBack(v);
+            }
+            else if (isOperator(c) == true)
+            {
+                if (initStack.isEmpty() == true)
+                    initStack.push(c);
+                else if (initStack.isEmpty() == false && Prec((char) initStack.top()) < Prec(c))
+                initStack.push(c);
+            }
+            else
+                return "Invalid Expression";
+             
+       }
+          while (!initStack.isEmpty()) {
+              queue.insertBack(initStack.pop());}
+          
+          
+          return queue.postFixString();
+       }
+       
+       
+       
+      public String infixToPostfix (String exp) 
       {
           String postfix = new String("");
           MyStack stack = new MyStack();
@@ -125,11 +218,12 @@ public class InfixToPostfix {
          }
         //postfixExp = postfix;
         return postfix; 
-    } 
+    }
      
       
   public int evaluatePostfix(String exp) 
     { 
+        exp = exp.replaceAll("\\s", "");
         //create a stack 
         MyStack stack=new MyStack(); 
         if (exp == "Invalid Expression")

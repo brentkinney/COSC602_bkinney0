@@ -104,4 +104,19 @@ public class MyQueue {
 		out += ref.data +"\t->null"; //Add the last node.
 		return out;
 	}
+        
+        
+        public String postFixString()
+        {
+            String out = "";
+            SLListNode ref = front;
+            while(ref.next != null)
+		{
+			out += ref.data + " ";
+			ref = ref.next;
+		}
+		
+		out += ref.data; //Add the last node.
+		return out;
+        }
 }
