@@ -149,7 +149,57 @@ public class InfixToPostfix {
            postfixExp = "";
           for (int i = 0; i<exp.length(); ++i){
             char c = exp.charAt(i);
-            if (Character.isDigit(c) == true)
+            
+            if (Prec(c) > 0)
+            {
+                while(initStack.isEmpty() == false && Prec((char) initStack.top()) >= Prec(c))
+                {
+                    queue.insertBack(initStack.pop());
+                }
+                initStack.push(c);
+            }
+            else if (c ==')')
+            {
+                char x = (char) initStack.pop();
+                while(x!= '(')
+                {
+                    queue.insertBack(x);
+                    x = (char) initStack.pop();
+                }
+            }
+            else if (c == '(')
+            {
+                initStack.push(c);
+            }
+            else
+            {
+                queue.insertBack(c);
+            }
+          }
+          while (!initStack.isEmpty()) 
+          {
+              queue.insertBack(initStack.pop());
+          }
+          postfixExp = queue.postFixString();
+          postfixExp = postfixExp.replaceAll("\\s","");
+          return queue.postFixString();
+       }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            /**if (Character.isDigit(c) == true)
             {
                queue.insertBack(c);
             }
@@ -170,7 +220,7 @@ public class InfixToPostfix {
           postfixExp = queue.postFixString();
           postfixExp = postfixExp.replaceAll("\\s","");
           return queue.postFixString();
-       }
+       }**/
        
        
        public int evaluatePostfix (String exp)
