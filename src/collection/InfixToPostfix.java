@@ -57,8 +57,8 @@ public class InfixToPostfix {
                     outputFile.println("Original Infix:            " + line);
                     outputFile.println("Corresponding Postfix:     " + post );
                     if (!post.equalsIgnoreCase("Invalid Expression")){
-                    int eval = this.evaluatePostfix(post);
-                    outputFile.println("Evaluation Result:        =" + eval );}
+                    //int eval = this.evaluatePostfix(post);
+                    outputFile.println("Evaluation Result:        =" + this.evalPostfix(postfixExp) );}
                     outputFile.println();
                     outputFile.println();
                     }
@@ -143,13 +143,15 @@ public class InfixToPostfix {
            //MyQueue queue = new MyQueue();
            //MyStack initStack = new MyStack();
            //MyStack finalStack = new MyStack();
-           
+           initStack.clear();
+           queue.clear();
+           finalStack.clear();
+           postfixExp = "";
           for (int i = 0; i<exp.length(); ++i){
             char c = exp.charAt(i);
             if (Character.isDigit(c) == true)
             {
-               int v = Character.getNumericValue(c);
-               queue.insertBack(v);
+               queue.insertBack(c);
             }
             else if (isOperator(c) == true)
             {
@@ -165,12 +167,69 @@ public class InfixToPostfix {
           while (!initStack.isEmpty()) {
               queue.insertBack(initStack.pop());}
           
-          
+          postfixExp = queue.postFixString();
+          postfixExp = postfixExp.replaceAll("\\s","");
           return queue.postFixString();
        }
        
        
+       public int evaluatePostfix (String exp)
+       {
+           int endVal = 0;
+          
+           while (!queue.isEmpty())
+           {
+             if (Character.isDigit((char) queue.front()) == true)
+             {
+                 
+                 finalStack.push(queue.front());
+                 queue.removeFront();
+                 
+             }
+             else if (isOperator((char) queue.front()) == true)
+             {
+                 int val1 = (int) finalStack.pop(); 
+                 int val2 = (int) finalStack.pop(); 
+                  
+                switch((char) queue.front()) 
+                { 
+                    case '+': 
+                    finalStack.push(val2+val1);
+                    queue.removeFront();
+                    break; 
+                      
+                    case '-': 
+                    finalStack.push(val2-val1);
+                    queue.removeFront();
+                    break; 
+                      
+                    case '/': 
+                    finalStack.push(val2/val1);
+                    queue.removeFront();
+                    break; 
+                      
+                    case '*': 
+                    finalStack.push(val2*val1);
+                    queue.removeFront();
+                    break;
+                    
+                    case '%':
+                    finalStack.push(val2%val1);
+                    queue.removeFront();
+                    break;
+                }                 
+            }
+             else if (queue.isEmpty() == true)
+             {
+                 endVal = (int) finalStack.pop();
+             }
+           }
+                      
+           return endVal;
+       }
        
+       
+       /**
       public String infixToPostfix (String exp) 
       {
           String postfix = new String("");
@@ -218,14 +277,14 @@ public class InfixToPostfix {
          }
         //postfixExp = postfix;
         return postfix; 
-    }
+    } **/
      
       
-  public int evaluatePostfix(String exp) 
+  public int evalPostfix(String exp) 
     { 
         exp = exp.replaceAll("\\s", "");
         //create a stack 
-        MyStack stack=new MyStack(); 
+        //MyStack stack=new MyStack(); 
         if (exp == "Invalid Expression")
             return 0;
         // Scan all characters one by one 
@@ -236,40 +295,40 @@ public class InfixToPostfix {
             // If the scanned character is an operand (number here), 
             // push it to the stack. 
             if(Character.isDigit(c)) 
-            stack.push(c - '0'); 
+            finalStack.push(c - '0'); 
               
             //  If the scanned character is an operator, pop two 
             // elements from stack apply the operator 
             else
             { 
-                int val1 = (int) stack.pop(); 
-                int val2 = (int) stack.pop(); 
+                int val1 = (int) finalStack.pop(); 
+                int val2 = (int) finalStack.pop(); 
                   
                 switch(c) 
                 { 
                     case '+': 
-                    stack.push(val2+val1); 
+                    finalStack.push(val2+val1); 
                     break; 
                       
                     case '-': 
-                    stack.push(val2- val1); 
+                    finalStack.push(val2- val1); 
                     break; 
                       
                     case '/': 
-                    stack.push(val2/val1); 
+                    finalStack.push(val2/val1); 
                     break; 
                       
                     case '*': 
-                    stack.push(val2*val1); 
+                    finalStack.push(val2*val1); 
                     break;
                     
                     case '%':
-                    stack.push(val2%val1);
+                    finalStack.push(val2%val1);
                     break;
               } 
             } 
         } 
-        return (int) stack.pop();     
+        return (int) finalStack.pop();     
     }     
       
       
