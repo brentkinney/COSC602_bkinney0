@@ -41,40 +41,50 @@ public class InfixToPostfix {
             
             
     
-       public void convertInputToOutput() {
+       public void convertInputToOutput() throws FileNotFoundException {
            PrintWriter outputFile = null;
+           Scanner input = null;
+           int eval = 0;
+           String post = "";
         try {
             File file = new File("..\\COSC602_P3_Input.txt");
             outputFile = new PrintWriter("..\\COSC602_P3_Output_bkinney0.txt");
-            try {
-                Scanner input = new Scanner(file);
+            input = new Scanner(file);
+        }
+        catch(FileNotFoundException ex){
+         System.out.println("Error openeing files");
+         throw ex;
+        }
                 while (input.hasNextLine()) {
                     
                     String line = input.nextLine();
-                    String exp = line.replaceAll("\\s", "");
+                    String exp = line.replaceAll("\\s", "");                   
                     if (!exp.isEmpty()){
-                    String post = this.convertInfix(exp);                    
-                    outputFile.println("Original Infix:            " + line);
-                    outputFile.println("Corresponding Postfix:     " + post );
-                    if (!post.equalsIgnoreCase("Invalid Expression")){
-                    //int eval = this.evaluatePostfix(post);
-                    outputFile.println("Evaluation Result:        =" + this.evalPostfix(postfixExp) );}
-                    outputFile.println();
-                    outputFile.println();
+                        outputFile.println("Original Infix:            " + line);
+                        try{
+                            post = this.convertInfix(exp);                        
+                        }
+                        catch(NumberFormatException numberException){
+                            outputFile.println("**Invalid Expression** \n\n");
+                            continue; 
+                        }
+                        try{
+                            eval = this.evalPostfix(post);
+                        }
+                        catch(NullPointerException nullException){
+                            outputFile.println("**Invalid Expression** \n\n");
+                            continue;                        
+                        }  
+                        
+                        outputFile.println("Corresponding Postfix:     " + post );                   
+                        outputFile.println("Evaluation Result:        ="+eval +" \n\n");
                     }
-                    
-                }
+                }                 
+                
                 input.close();
                 outputFile.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(InfixToPostfix.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            outputFile.close();
-        }
-    }
+            } 
+    
        
        /**
        public String infixToPostfix(String exp) {
@@ -138,7 +148,7 @@ public class InfixToPostfix {
       } 
        
       
-       public String convertInfix (String exp)
+       public String convertInfix (String exp) throws NumberFormatException 
        {
            //MyQueue queue = new MyQueue();
            //MyStack initStack = new MyStack();
@@ -147,8 +157,15 @@ public class InfixToPostfix {
            queue.clear();
            finalStack.clear();
            postfixExp = "";
+           
           for (int i = 0; i<exp.length(); ++i){
-            char c = exp.charAt(i);
+            char c = exp.charAt(i);           
+            if(i > 0){
+                char previous = exp.charAt(i-1);
+                if(isNumber(c) && isNumber(previous)){
+                    throw new NumberFormatException("Invalid Expression");
+                }
+            }
             
             if (Prec(c) > 0)
             {
@@ -182,10 +199,18 @@ public class InfixToPostfix {
           }
           postfixExp = queue.postFixString();
           postfixExp = postfixExp.replaceAll("\\s","");
-          return queue.postFixString();
+          return postfixExp;
        }
             
-            
+           
+       
+       private boolean isNumber(char c){
+           if(c >= 48 && c < 58)
+               return true;
+           else{
+               return false;
+           }
+       }
             
             
             
@@ -335,7 +360,7 @@ public class InfixToPostfix {
         exp = exp.replaceAll("\\s", "");
         //create a stack 
         //MyStack stack=new MyStack(); 
-        if (exp == "Invalid Expression")
+        if (exp == "**Invalid Expression**")
             return 0;
         // Scan all characters one by one 
         for(int i=0;i<exp.length();i++) 
@@ -351,31 +376,38 @@ public class InfixToPostfix {
             // elements from stack apply the operator 
             else
             { 
-                int val1 = (int) finalStack.pop(); 
-                int val2 = (int) finalStack.pop(); 
-                  
-                switch(c) 
-                { 
-                    case '+': 
-                    finalStack.push(val2+val1); 
-                    break; 
-                      
-                    case '-': 
-                    finalStack.push(val2- val1); 
-                    break; 
-                      
-                    case '/': 
-                    finalStack.push(val2/val1); 
-                    break; 
-                      
-                    case '*': 
-                    finalStack.push(val2*val1); 
-                    break;
+                try{
+                    int val1 = (int) finalStack.pop(); 
+                    int val2 = (int) finalStack.pop(); 
+
+                    switch(c) 
+                    { 
+                        case '+': 
+                        finalStack.push(val2+val1); 
+                        break; 
+
+                        case '-': 
+                        finalStack.push(val2- val1); 
+                        break; 
+
+                        case '/': 
+                        finalStack.push(val2/val1); 
+                        break; 
+
+                        case '*': 
+                        finalStack.push(val2*val1); 
+                        break;
+
+                        case '%':
+                        finalStack.push(val2%val1);
+                        break;
+                    } 
+                }
+                catch(NullPointerException nullException){
+                    postfixExp = "**Invalid Expression**";
+                    throw nullException;
                     
-                    case '%':
-                    finalStack.push(val2%val1);
-                    break;
-              } 
+                }
             } 
         } 
         return (int) finalStack.pop();     

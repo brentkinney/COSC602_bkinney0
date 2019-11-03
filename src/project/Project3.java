@@ -5,6 +5,7 @@
  */
 package project;
 import collection.*;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -12,7 +13,7 @@ import collection.*;
  */
 public class Project3 {
     
-    public static void test()
+    public static void test() throws FileNotFoundException
     {
        
        String exp1 = "3+4*5";
@@ -37,7 +38,12 @@ public class Project3 {
        System.out.println("Input file has been converted, check output file for results");
        System.out.println(conversion.convertInfix(exp1));
        **/
+       try{
        conversion.convertInputToOutput();
+       }
+       catch(FileNotFoundException exception){
+           throw exception;
+       }
        
     }
 }
