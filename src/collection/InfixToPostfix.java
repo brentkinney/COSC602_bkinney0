@@ -96,9 +96,7 @@ public class InfixToPostfix {
       
        public String convertInfix (String exp) throws NumberFormatException 
        {
-           //MyQueue queue = new MyQueue();
-           //MyStack initStack = new MyStack();
-           //MyStack finalStack = new MyStack();
+           
            initStack.clear();
            queue.clear();
            finalStack.clear();
@@ -109,7 +107,7 @@ public class InfixToPostfix {
             if(i > 0){
                 char previous = exp.charAt(i-1);
                 if((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false){
-                    throw new NumberFormatException("Invalid Expression");
+                    throw new NumberFormatException("**Invalid Expression**");
                 }
             }
             
