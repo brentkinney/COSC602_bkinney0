@@ -22,7 +22,14 @@ public class InfixToPostfix {
             MyStack initStack = new MyStack();
             MyStack finalStack = new MyStack();
             String postfixExp;
+    
             
+            
+    /**
+     * 
+     * @param ch
+     * @return 
+     */        
     static int Prec(char ch) 
     { 
         switch (ch) 
@@ -40,7 +47,10 @@ public class InfixToPostfix {
     }         
             
             
-    
+    /**
+     * 
+     * @throws FileNotFoundException 
+     */
        public void convertInputToOutput() throws FileNotFoundException {
            PrintWriter outputFile = null;
            Scanner input = null;
@@ -87,13 +97,22 @@ public class InfixToPostfix {
     
        
        
-         
+        /**
+         * 
+         * @param c
+         * @return 
+         */ 
       public static boolean isOperator(char c){
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' 
         || c == '(' || c == ')';
       } 
        
-      
+      /**
+       * 
+       * @param exp
+       * @return
+       * @throws NumberFormatException 
+       */
        public String convertInfix (String exp) throws NumberFormatException 
        {
            
@@ -147,29 +166,24 @@ public class InfixToPostfix {
        }
             
            
-       
+       /**
+        * 
+        * @param c
+        * @return 
+        */
        private boolean isNumber(char c){
            if(c >= 48 && c < 58)
                return true;
            else{
                return false;
            }
-       }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+       }    
             
             
        
-       
+       //using queue - this method not currently in use
+       //use this one to model the working method to use queue and stack
+       //after refactor, delete this method
        public int evaluatePostfix (String exp)
        {
            int endVal = 0;
@@ -225,7 +239,14 @@ public class InfixToPostfix {
            return endVal;
        }
        
+      
        
+       
+       /**
+        * 
+        * @param str
+        * @return 
+        */
       public static boolean isBalanced(String str) {
     int count = 0;
 
@@ -241,7 +262,11 @@ public class InfixToPostfix {
        
         
      
-      
+   /**
+    * 
+    * @param exp
+    * @return 
+    */   
   public int evalPostfix(String exp) 
     { 
         exp = exp.replaceAll("\\s", "");
