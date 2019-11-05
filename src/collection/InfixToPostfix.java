@@ -9,8 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -108,6 +107,8 @@ public class InfixToPostfix {
         || c == '(' || c == ')';
       } 
        
+      
+      
       /**
        * method the converts a given string from an infix expression to a
        * postfix expression.
