@@ -86,61 +86,7 @@ public class InfixToPostfix {
             } 
     
        
-       /**
-       public String infixToPostfix(String exp) {
-        String postfixString = "";
-        MyStack stack = new MyStack();
-        for (int index = 0; index < exp.length(); ++index) {
-            char value = exp.charAt(index);
-            if (value == '(') {
-                stack.push('('); // Code Added
-            } else if (value == ')') {
-                Character oper = (Character) stack.top();
-
-                while (!(oper.equals('(')) && !(stack.isEmpty())) {
-                    stack.pop();
-                    postfixString += oper.charValue();
-                    if (!stack.isEmpty()) // Code Added
-                        oper = (Character) stack.top(); // Code Added
-                }
-                stack.pop(); // Code Added
-            } else if (value == '+' || value == '-') {
-                if (stack.isEmpty()) {
-                    stack.push(value);
-                } else {
-                    Character oper = (Character) stack.top();
-                    while (!(stack.isEmpty() || oper.equals(('(')) || oper.equals((')')))) {
-                        oper = (Character) stack.pop(); // Code Updated
-                        postfixString += oper.charValue();
-                    }
-                    stack.push(value);
-                }
-            } else if (value == '*' || value == '/') {
-                if (stack.isEmpty()) {
-                    stack.push(value);
-                } else {
-                    Character oper = (Character) stack.top();
-                    // while condition updated
-                    while (!oper.equals(('(')) && !oper.equals(('+')) && !oper.equals(('-')) && !stack.isEmpty()) {
-                        oper = (Character) stack.pop(); // Code Updated
-                        postfixString += oper.charValue();
-                    }
-                    stack.push(value);
-                }
-            } else {
-                postfixString += value;
-            }
-        }
-
-        while (!stack.isEmpty()) {
-            Character oper = (Character) stack.top();
-            if (!oper.equals(('('))) {
-                stack.pop();
-                postfixString += oper.charValue();
-            }
-        }
-        return postfixString;
-    }**/
+       
          
       public static boolean isOperator(char c){
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' 
@@ -162,7 +108,7 @@ public class InfixToPostfix {
             char c = exp.charAt(i);           
             if(i > 0){
                 char previous = exp.charAt(i-1);
-                if(isNumber(c) && isNumber(previous)){
+                if((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false){
                     throw new NumberFormatException("Invalid Expression");
                 }
             }
@@ -224,28 +170,6 @@ public class InfixToPostfix {
             
             
             
-            /**if (Character.isDigit(c) == true)
-            {
-               queue.insertBack(c);
-            }
-            else if (isOperator(c) == true)
-            {
-                if (initStack.isEmpty() == true)
-                    initStack.push(c);
-                else if (initStack.isEmpty() == false && Prec((char) initStack.top()) < Prec(c))
-                initStack.push(c);
-            }
-            else
-                return "Invalid Expression";
-             
-       }
-          while (!initStack.isEmpty()) {
-              queue.insertBack(initStack.pop());}
-          
-          postfixExp = queue.postFixString();
-          postfixExp = postfixExp.replaceAll("\\s","");
-          return queue.postFixString();
-       }**/
        
        
        public int evaluatePostfix (String exp)
@@ -304,55 +228,20 @@ public class InfixToPostfix {
        }
        
        
-       /**
-      public String infixToPostfix (String exp) 
-      {
-          String postfix = new String("");
-          MyStack stack = new MyStack();
-          
-         for (int i = 0; i<exp.length(); ++i) 
-        { 
-            char c = exp.charAt(i);
-            if (Character.isLetterOrDigit(c)) 
-                postfix += c; 
-               
-            // If the scanned character is an '(', push it to the stack. 
-            else if (c == '(') 
-                stack.push(c); 
-              
-            //  If the scanned character is an ')', pop and output from the stack  
-            // until an '(' is encountered. 
-            else if (c == ')')
-            {
-                while (!stack.isEmpty() && !stack.top().equals('(')) 
-                    postfix += stack.pop(); 
-                  
-                if (!stack.isEmpty() && !stack.top().equals('(')) 
-                    return "Invalid Expression"; // invalid expression                 
-                else
-                    stack.pop(); 
-            }
-            else // an operator is encountered 
-            { 
-                while (!stack.isEmpty() && Prec(c) <= Prec((char) stack.top())){ 
-                    if(stack.top().equals('('))
-                        return "Invalid Expression"; 
-                    postfix += stack.pop(); 
-             } 
-                stack.push(c); 
-            } 
+      public static boolean isBalanced(String str) {
+    int count = 0;
+
+    for (int i = 0; i < str.length() && count >= 0; i++) {
+        if (str.charAt(i) == '(')
+            count++;
+        else if (str.charAt(i) == ')')
+            count--;
+    }
+
+    return count == 0;
+}
        
-        } 
-       
-        // pop all the operators from the stack 
-        while (!stack.isEmpty()){ 
-            if(stack.top().equals('(')) 
-                return "Invalid Expression"; 
-            postfix += stack.pop(); 
-         }
-        //postfixExp = postfix;
-        return postfix; 
-    } **/
+        
      
       
   public int evalPostfix(String exp) 
