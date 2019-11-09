@@ -9,8 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -22,8 +21,15 @@ public class InfixToPostfix {
             MyStack initStack = new MyStack();
             MyStack finalStack = new MyStack();
             String postfixExp;
+    
             
-    static int Prec(char ch) 
+            
+    /**
+     * 
+     * @param ch the char to be checked
+     * @return the rank of the operator precedence in terms of mathmatical operations
+     */        
+    static int Precedence(char ch) 
     { 
         switch (ch) 
         { 
@@ -40,7 +46,11 @@ public class InfixToPostfix {
     }         
             
             
-    
+    /**
+     * Method to read the input file, execute all methods and store result
+     * in the output file
+     * @throws FileNotFoundException 
+     */
        public void convertInputToOutput() throws FileNotFoundException {
            PrintWriter outputFile = null;
            Scanner input = null;
@@ -86,73 +96,29 @@ public class InfixToPostfix {
             } 
     
        
-       /**
-       public String infixToPostfix(String exp) {
-        String postfixString = "";
-        MyStack stack = new MyStack();
-        for (int index = 0; index < exp.length(); ++index) {
-            char value = exp.charAt(index);
-            if (value == '(') {
-                stack.push('('); // Code Added
-            } else if (value == ')') {
-                Character oper = (Character) stack.top();
-
-                while (!(oper.equals('(')) && !(stack.isEmpty())) {
-                    stack.pop();
-                    postfixString += oper.charValue();
-                    if (!stack.isEmpty()) // Code Added
-                        oper = (Character) stack.top(); // Code Added
-                }
-                stack.pop(); // Code Added
-            } else if (value == '+' || value == '-') {
-                if (stack.isEmpty()) {
-                    stack.push(value);
-                } else {
-                    Character oper = (Character) stack.top();
-                    while (!(stack.isEmpty() || oper.equals(('(')) || oper.equals((')')))) {
-                        oper = (Character) stack.pop(); // Code Updated
-                        postfixString += oper.charValue();
-                    }
-                    stack.push(value);
-                }
-            } else if (value == '*' || value == '/') {
-                if (stack.isEmpty()) {
-                    stack.push(value);
-                } else {
-                    Character oper = (Character) stack.top();
-                    // while condition updated
-                    while (!oper.equals(('(')) && !oper.equals(('+')) && !oper.equals(('-')) && !stack.isEmpty()) {
-                        oper = (Character) stack.pop(); // Code Updated
-                        postfixString += oper.charValue();
-                    }
-                    stack.push(value);
-                }
-            } else {
-                postfixString += value;
-            }
-        }
-
-        while (!stack.isEmpty()) {
-            Character oper = (Character) stack.top();
-            if (!oper.equals(('('))) {
-                stack.pop();
-                postfixString += oper.charValue();
-            }
-        }
-        return postfixString;
-    }**/
-         
+       
+        /**
+         * method that checks if a char is an operator
+         * @param c the char to check
+         * @return true if given char matches one from set of operands below
+         */ 
       public static boolean isOperator(char c){
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' 
         || c == '(' || c == ')';
       } 
        
       
+      
+      /**
+       * method the converts a given string from an infix expression to a
+       * postfix expression.
+       * @param exp is the string of an infix expression
+       * @return the string of the associated postfix expression
+       * @throws NumberFormatException 
+       */
        public String convertInfix (String exp) throws NumberFormatException 
        {
-           //MyQueue queue = new MyQueue();
-           //MyStack initStack = new MyStack();
-           //MyStack finalStack = new MyStack();
+           
            initStack.clear();
            queue.clear();
            finalStack.clear();
@@ -162,14 +128,14 @@ public class InfixToPostfix {
             char c = exp.charAt(i);           
             if(i > 0){
                 char previous = exp.charAt(i-1);
-                if(isNumber(c) && isNumber(previous)){
-                    throw new NumberFormatException("Invalid Expression");
+                if((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false){
+                    throw new NumberFormatException("**Invalid Expression**");
                 }
             }
             
-            if (Prec(c) > 0)
+            if (Precedence(c) > 0)
             {
-                while(initStack.isEmpty() == false && Prec((char) initStack.top()) >= Prec(c))
+                while(initStack.isEmpty() == false && Precedence((char) initStack.top()) >= Precedence(c))
                 {
                     queue.insertBack(initStack.pop());
                 }
@@ -203,51 +169,24 @@ public class InfixToPostfix {
        }
             
            
-       
+       /**
+        * this method checks if a char is a numerical number
+        * @param c the char to check
+        * @return true if the given char is a number
+        */
        private boolean isNumber(char c){
            if(c >= 48 && c < 58)
                return true;
            else{
                return false;
            }
-       }
+       }    
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            /**if (Character.isDigit(c) == true)
-            {
-               queue.insertBack(c);
-            }
-            else if (isOperator(c) == true)
-            {
-                if (initStack.isEmpty() == true)
-                    initStack.push(c);
-                else if (initStack.isEmpty() == false && Prec((char) initStack.top()) < Prec(c))
-                initStack.push(c);
-            }
-            else
-                return "Invalid Expression";
-             
-       }
-          while (!initStack.isEmpty()) {
-              queue.insertBack(initStack.pop());}
-          
-          postfixExp = queue.postFixString();
-          postfixExp = postfixExp.replaceAll("\\s","");
-          return queue.postFixString();
-       }**/
        
-       
+       //using queue - this method not currently in use
+       //use this one to model the working method to use queue and stack
+       //after refactor, delete this method
        public int evaluatePostfix (String exp)
        {
            int endVal = 0;
@@ -303,63 +242,39 @@ public class InfixToPostfix {
            return endVal;
        }
        
+      
+       
        
        /**
-      public String infixToPostfix (String exp) 
-      {
-          String postfix = new String("");
-          MyStack stack = new MyStack();
-          
-         for (int i = 0; i<exp.length(); ++i) 
-        { 
-            char c = exp.charAt(i);
-            if (Character.isLetterOrDigit(c)) 
-                postfix += c; 
-               
-            // If the scanned character is an '(', push it to the stack. 
-            else if (c == '(') 
-                stack.push(c); 
-              
-            //  If the scanned character is an ')', pop and output from the stack  
-            // until an '(' is encountered. 
-            else if (c == ')')
-            {
-                while (!stack.isEmpty() && !stack.top().equals('(')) 
-                    postfix += stack.pop(); 
-                  
-                if (!stack.isEmpty() && !stack.top().equals('(')) 
-                    return "Invalid Expression"; // invalid expression                 
-                else
-                    stack.pop(); 
-            }
-            else // an operator is encountered 
-            { 
-                while (!stack.isEmpty() && Prec(c) <= Prec((char) stack.top())){ 
-                    if(stack.top().equals('('))
-                        return "Invalid Expression"; 
-                    postfix += stack.pop(); 
-             } 
-                stack.push(c); 
-            } 
+        * this method checks if a given string has a balanced number of parenthesis
+        * @param str is the string to check
+        * @return true if the left amount of brackets matches the right amount
+        * of brackets.
+        */
+      public static boolean isBalanced(String str) {
+    int count = 0;
+
+    for (int i = 0; i < str.length() && count >= 0; i++) {
+        if (str.charAt(i) == '(')
+            count++;
+        else if (str.charAt(i) == ')')
+            count--;
+    }
+
+    return count == 0;
+}
        
-        } 
-       
-        // pop all the operators from the stack 
-        while (!stack.isEmpty()){ 
-            if(stack.top().equals('(')) 
-                return "Invalid Expression"; 
-            postfix += stack.pop(); 
-         }
-        //postfixExp = postfix;
-        return postfix; 
-    } **/
+        
      
-      
+   /**
+    * method that evaluates a string given in postfix notation
+    * @param exp is the postfix notation string that is given
+    * @return returns the int value of the expression
+    */   
   public int evalPostfix(String exp) 
     { 
         exp = exp.replaceAll("\\s", "");
-        //create a stack 
-        //MyStack stack=new MyStack(); 
+        
         if (exp == "**Invalid Expression**")
             return 0;
         // Scan all characters one by one 
