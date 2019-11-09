@@ -184,67 +184,6 @@ public class InfixToPostfix {
             
             
        
-       //using queue - this method not currently in use
-       //use this one to model the working method to use queue and stack
-       //after refactor, delete this method
-       public int evaluatePostfix (String exp)
-       {
-           int endVal = 0;
-          
-           while (!queue.isEmpty())
-           {
-             if (Character.isDigit((char) queue.front()) == true)
-             {
-                 
-                 finalStack.push(queue.front());
-                 queue.removeFront();
-                 
-             }
-             else if (isOperator((char) queue.front()) == true)
-             {
-                 int val1 = (int) finalStack.pop(); 
-                 int val2 = (int) finalStack.pop(); 
-                  
-                switch((char) queue.front()) 
-                { 
-                    case '+': 
-                    finalStack.push(val2+val1);
-                    queue.removeFront();
-                    break; 
-                      
-                    case '-': 
-                    finalStack.push(val2-val1);
-                    queue.removeFront();
-                    break; 
-                      
-                    case '/': 
-                    finalStack.push(val2/val1);
-                    queue.removeFront();
-                    break; 
-                      
-                    case '*': 
-                    finalStack.push(val2*val1);
-                    queue.removeFront();
-                    break;
-                    
-                    case '%':
-                    finalStack.push(val2%val1);
-                    queue.removeFront();
-                    break;
-                }                 
-            }
-             else if (queue.isEmpty() == true)
-             {
-                 endVal = (int) finalStack.pop();
-             }
-           }
-                      
-           return endVal;
-       }
-       
-      
-       
-       
        /**
         * this method checks if a given string has a balanced number of parenthesis
         * @param str is the string to check
@@ -327,6 +266,4 @@ public class InfixToPostfix {
         } 
         return (int) finalStack.pop();     
     }     
-      
-      
 }
