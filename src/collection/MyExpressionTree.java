@@ -148,10 +148,42 @@ public class MyExpressionTree extends MyBinaryTree {
        * @param exp is the string of an infix expression
        * @throws NumberFormatException 
        */
-        public void convertInfix (String exp)
+       public void convertInfix(String exp) throws NumberFormatException
+    {
+            stack.clear();
+            deque.clear();
+
+        for (int i = 0; i < exp.length(); ++i)
         {
-            
+            char c = exp.charAt(i);
+            if (i > 0)
+            {
+                char previous = exp.charAt(i - 1);
+                if ((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false)
+                {
+                    throw new NumberFormatException("**Invalid Expression**");
+                }
+            }
+
+            if (Precedence(c) > 0) 
+            {
+                while (stack.isEmpty() == false && Precedence((char) stack.top()) >= Precedence(c)) 
+                {
+                    deque.insertBack(stack.pop());
+                }
+                stack.push(c);
+            } 
+            else if (c == ')') 
+            {
+                char x = (char) stack.pop();
+                while (x != '(') 
+                {
+                    deque.insertBack(x);
+                    x = (char) stack.pop();
+                }
+            }
         }
+    }
         
         
         
@@ -204,4 +236,72 @@ public class MyExpressionTree extends MyBinaryTree {
                 input.close();
                 outputFile.close();
             } 
+        
+        
+        /**
+     * 
+     * @param ch the char to be checked
+     * @return the rank of the operator precedence in terms of mathmatical operations
+     */        
+    static int Precedence(char ch) 
+    { 
+        switch (ch) 
+        { 
+        case '+': 
+        case '-': 
+            return 1; 
+       
+        case '*': 
+        case '/':
+        case '%':
+            return 2; 
+        } 
+        return -1; 
+    }
+    
+    
+    
+    /**
+         * method that checks if a char is an operator
+         * @param c the char to check
+         * @return true if given char matches one from set of operands below
+         */ 
+      public static boolean isOperator(char c){
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' 
+        || c == '(' || c == ')';
+      } 
+      
+      
+       /**
+        * this method checks if a char is a numerical number
+        * @param c the char to check
+        * @return true if the given char is a number
+        */
+       private boolean isNumber(char c){
+           if(c >= 48 && c < 58)
+               return true;
+           else{
+               return false;
+           }
+       }
+       
+       
+       /**
+        * this method checks if a given string has a balanced number of parenthesis
+        * @param str is the string to check
+        * @return true if the left amount of brackets matches the right amount
+        * of brackets.
+        */
+      public static boolean isBalanced(String str) {
+    int count = 0;
+
+    for (int i = 0; i < str.length() && count >= 0; i++) {
+        if (str.charAt(i) == '(')
+            count++;
+        else if (str.charAt(i) == ')')
+            count--;
+    }
+
+    return count == 0;
+}
 }
