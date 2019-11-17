@@ -153,36 +153,76 @@ public class MyExpressionTree extends MyBinaryTree {
             stack.clear();
             deque.clear();
 
-        for (int i = 0; i < exp.length(); ++i)
-        {
-            char c = exp.charAt(i);
-            if (i > 0)
+       //step 1 read input line and do as much checking as possible on validity of 
+       //exp
+       
+        for (int i = 0; i<exp.length(); ++i){
+            char c = exp.charAt(i);           
+            if(i > 0)
             {
-                char previous = exp.charAt(i - 1);
-                if ((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false)
+                char previous = exp.charAt(i-1);
+                if((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false)
                 {
                     throw new NumberFormatException("**Invalid Expression**");
                 }
             }
-
-            if (Precedence(c) > 0) 
+       
+       //step 2 read first char and if number, put into tree node and put in deque
+       // if char is operand, check top of stack of any other operands and if higher
+       //precedence then top of stack push onto stack , if not, pop two numbers from
+       //back of deque and hang onto operand
+       //if char is open parenthesis, push onto the stack
+            if (isNumber(c))
             {
-                while (stack.isEmpty() == false && Precedence((char) stack.top()) >= Precedence(c)) 
+                MyBinaryTreeNode node = new MyBinaryTreeNode(c);
+                deque.insertBack(node);
+            }
+            else if (c == '(')
+            {
+                MyBinaryTreeNode node = new MyBinaryTreeNode(c);
+                stack.push(node);
+            }
+            else if ( c == ')')
+            {
+                
+                while ((char)stack.top() != '(')
                 {
-                    deque.insertBack(stack.pop());
+                    //write code that handles the operands from the close to open parenthesis
+                    MyBinaryTreeNode node = new MyBinaryTreeNode(stack.pop());
+                    node.right = (MyBinaryTreeNode) deque.removeBack();
+                    node.left = (MyBinaryTreeNode) deque.removeBack();
+                    deque.insertBack(node);
                 }
-                stack.push(c);
-            } 
-            else if (c == ')') 
+            }
+            else
             {
-                char x = (char) stack.pop();
-                while (x != '(') 
+                if (Precedence(c) > Precedence((char) stack.top()))
                 {
-                    deque.insertBack(x);
-                    x = (char) stack.pop();
+                   MyBinaryTreeNode node = new MyBinaryTreeNode(c);
+                   stack.push(node); 
                 }
             }
         }
+       
+       //step 3 continue adding to deque and stack for numbers and operands respectively
+       //***note***if open parenthesis has not been closed, continue adding to deque
+       //and stack until it closes, then place values into tree expression
+       
+       
+       //step4 if it is time to pop values, take the operand off top of stack
+       //and temporarily hold, pop last number value from deque, hang onto operand
+       //as right child, pop another number value from back of deque and hang as
+       //left child to operand.  now insert tree into back of deque.
+       //**note**if close parenthese is reached, you need to pop any operators and
+       //hang them with the corresponding numbers fromt he deque.  Once operators
+       // handled, the top of stack should be
+       //the open parenthesis as you should have handled any operators in between.
+       //if so, pop the open parenthesis and keep going
+       
+       
+       //step 5 this pattern repeats until the entire line is read and dealt with
+       //at the end the stack should be empty and there should only be one value in
+       //the deque, it should be an expression tree
     }
         
         
@@ -214,22 +254,26 @@ public class MyExpressionTree extends MyBinaryTree {
                     if (!exp.isEmpty()){
                         outputFile.println("Original Infix:            " + line);
                         try{
-                            post = this.convertInfix(exp);                        
+                            this.convertInfix(exp);                        
                         }
                         catch(NumberFormatException numberException){
                             outputFile.println("**Invalid Expression** \n\n");
                             continue; 
                         }
-                        try{
-                            eval = this.evalPostfix(post);
+                        outputFile.println("Preorder Traversal:         " + this.preorderTraversal());
+                        outputFile.println("Inorder Traversal:          " + this.inorderTraversal());
+                        outputFile.println("Postorder Traversal:        " + this.postorderTraversal());
+                        try
+                        {
+                            eval = evaluate((MyBinaryTreeNode) deque.removeBack());
                         }
                         catch(NullPointerException nullException){
                             outputFile.println("**Invalid Expression** \n\n");
                             continue;                        
                         }  
                         
-                        outputFile.println("Corresponding Postfix:     " + post );                   
-                        outputFile.println("Evaluation Result:        ="+eval +" \n\n");
+                        //outputFile.println("Corresponding Postfix:     " + post );                   
+                        outputFile.println("Evaluation Result:        =" +eval+ " \n\n");
                     }
                 }                 
                 
