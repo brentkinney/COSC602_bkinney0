@@ -83,7 +83,7 @@ public class MyExpressionTree extends MyBinaryTree {
         @Override
         public String preorderTraversal()
         {
-            return preorderHelper(root) + "\n";
+            return preorderHelper(root);
         }
         
         /**
@@ -105,7 +105,7 @@ public class MyExpressionTree extends MyBinaryTree {
         @Override
         public String inorderTraversal()
         {
-            return inorderHelper(root) + "\n";
+            return inorderHelper(root);
         }
         
         /**
@@ -127,7 +127,7 @@ public class MyExpressionTree extends MyBinaryTree {
         @Override
         public String postorderTraversal()
         {
-            return postorderHelper(root) + "\n";
+            return postorderHelper(root);
         }
         
         /**
@@ -161,7 +161,9 @@ public class MyExpressionTree extends MyBinaryTree {
             if(i > 0)
             {
                 char previous = exp.charAt(i-1);
-                if((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false)
+                if((isNumber(c) && isNumber(previous)) || isBalanced(exp) == false ||
+                        (isOperator(c) && isOperator(previous)) || isOperator(exp.charAt(0))
+                        || isOperator(exp.charAt(exp.length() - 1)))
                 {
                     throw new NumberFormatException("**Invalid Expression**");
                 }
@@ -179,8 +181,8 @@ public class MyExpressionTree extends MyBinaryTree {
             }
             else if (c == '(')
             {
-                MyBinaryTreeNode node = new MyBinaryTreeNode(c);
-                stack.push(node);
+                
+                stack.push(c);
             }
             else if ( c == ')')
             {
@@ -193,16 +195,35 @@ public class MyExpressionTree extends MyBinaryTree {
                     node.left = (MyBinaryTreeNode) deque.removeBack();
                     deque.insertBack(node);
                 }
+                stack.pop();
             }
             else
             {
-                if (Precedence(c) > Precedence((char) stack.top()))
+                
+                if (stack.isEmpty() || Precedence(c) > Precedence((char) stack.top()))
                 {
-                   MyBinaryTreeNode node = new MyBinaryTreeNode(c);
-                   stack.push(node); 
+                   
+                   stack.push(c); 
                 }
+                else
+                {                                     
+                    MyBinaryTreeNode node = new MyBinaryTreeNode(stack.pop());
+                    node.right = (MyBinaryTreeNode) deque.removeBack();
+                    node.left = (MyBinaryTreeNode) deque.removeBack();
+                    deque.insertBack(node);
+                    stack.push(c);
+                }
+                
             }
+            
         }
+        while(!stack.isEmpty()) 
+                   {
+                    MyBinaryTreeNode node = new MyBinaryTreeNode(stack.pop());
+                    node.right = (MyBinaryTreeNode) deque.removeBack();
+                    node.left = (MyBinaryTreeNode) deque.removeBack();
+                    deque.insertBack(node);
+                   }
        
        //step 3 continue adding to deque and stack for numbers and operands respectively
        //***note***if open parenthesis has not been closed, continue adding to deque
@@ -260,9 +281,10 @@ public class MyExpressionTree extends MyBinaryTree {
                             outputFile.println("**Invalid Expression** \n\n");
                             continue; 
                         }
-                        outputFile.println("Preorder Traversal:         " + this.preorderTraversal());
-                        outputFile.println("Inorder Traversal:          " + this.inorderTraversal());
-                        outputFile.println("Postorder Traversal:        " + this.postorderTraversal());
+                        root = (MyBinaryTreeNode) deque.back();
+                        outputFile.println("Preorder Traversal:        " + this.preorderTraversal());
+                        outputFile.println("Inorder Traversal:        " + this.inorderTraversal());
+                        outputFile.println("Postorder Traversal:     " + this.postorderTraversal());
                         try
                         {
                             eval = evaluate((MyBinaryTreeNode) deque.removeBack());
@@ -311,8 +333,7 @@ public class MyExpressionTree extends MyBinaryTree {
          * @return true if given char matches one from set of operands below
          */ 
       public static boolean isOperator(char c){
-        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' 
-        || c == '(' || c == ')';
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
       } 
       
       
