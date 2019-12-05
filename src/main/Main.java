@@ -18,7 +18,7 @@ public class Main {
     {
         try
         {
-        Project3.test();
+        Project4.test();
         }
         catch(FileNotFoundException exception){
             throw exception;
